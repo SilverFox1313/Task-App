@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // components
 import Form from "@components/Form";
 
-const UpdateTask = () => {
+const UpdateTaskContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const taskId = searchParams.get("id");
@@ -22,15 +22,15 @@ const UpdateTask = () => {
       setPost({
         title: data.title,
         body: data.body,
-        priority: data.priority
+        priority: data.priority,
       });
     };
 
     if (taskId) getTaskDetails();
-  }, [taskId])
+  }, [taskId]);
 
   const updateTask = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setIsSubmitting(true);
 
     if (!taskId) return alert("Missing PromptId!");
@@ -41,7 +41,7 @@ const UpdateTask = () => {
         body: JSON.stringify({
           title: post.title,
           body: post.body,
-          priority: post.priority
+          priority: post.priority,
         }),
       });
 
@@ -65,5 +65,11 @@ const UpdateTask = () => {
     />
   );
 };
+
+const UpdateTask = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <UpdateTaskContent />
+  </Suspense>
+);
 
 export default UpdateTask;
